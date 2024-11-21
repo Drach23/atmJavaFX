@@ -7,31 +7,37 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Account;
 import utilities.Paths;
 
 import java.io.IOException;
 
-public class dashboardController {
+public class withdrawController implements AccountAwareController{
     @FXML
-
     private Button btnAccountStatement;
-
-    @FXML
-    private Button btnDeposit;
 
     @FXML
     private Button btnLogout;
 
     @FXML
-    private Button btnTransfer;
+    private Button btnMenuDeposit;
+
+    @FXML
+    private Button btnMenuTransfer;
+
+    @FXML
+    private Button btnMenuWithdraw;
 
     @FXML
     private Button btnWithdraw;
 
     @FXML
-    private Label lblAccountName;
+    private Label lblError;
+
+    @FXML
+    private TextField txtWithdraw;
     private Account activeAccount;
 
     @FXML
@@ -46,18 +52,19 @@ public class dashboardController {
 
     @FXML
     void openDepositWindow(ActionEvent event) {
-        navigateToWindow(Paths.DEPOSIT, event);
+        navigateToWindow(Paths.DEPOSIT,event);
     }
 
     @FXML
     void openTransferWindow(ActionEvent event) {
-        navigateToWindow(Paths.TRANSFER, event);
+        navigateToWindow(Paths.TRANSFER,event);
     }
 
     @FXML
     void openWithdrawWindow(ActionEvent event) {
-        navigateToWindow(Paths.WITHDRAW, event);
+        navigateToWindow(Paths.WITHDRAW,event);
     }
+
 
     private void navigateToWindow(String fxmlPath, ActionEvent event) {
         try {
@@ -81,19 +88,11 @@ public class dashboardController {
             e.printStackTrace();
         }
     }
-
-
+    @Override
     public void setCuentaActiva(Account activeAccount) {
         this.activeAccount = activeAccount;
-
-        // Actualiza la UI cuando se establece la cuenta activa
-        if (lblAccountName != null) {
-            lblAccountName.setText(activeAccount != null ? "Bienvenido " + activeAccount.getName() + " " + activeAccount.getLastname() : "No encontrado");
-        }
-    }
-
-    @FXML
-    public void initialize() {
+        // Actualiza la interfaz con la información de la cuenta activa
+        System.out.println("Cuenta recibida: " + activeAccount.getNumberAccount());
 
     }
 }

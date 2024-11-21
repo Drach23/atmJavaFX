@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox prefHeight="503.0" prefWidth="854.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.depositController">
+<HBox prefHeight="503.0" prefWidth="854.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.transferController">
    <children>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="280.0" style="-fx-background-color: #002436;">
          <children>
@@ -59,7 +59,7 @@
       </VBox>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="680.0" HBox.hgrow="ALWAYS">
          <children>
-            <Label style="-fx-font-weight: bolder;" text="DEPOSITAR A TU CUENTA">
+            <Label style="-fx-font-weight: bolder;" text="REALIZAR TRANSFERENCIA A OTRA CUENTA">
                <font>
                   <Font size="20.0" />
                </font>
@@ -67,7 +67,7 @@
                   <Insets bottom="30.0" />
                </VBox.margin>
             </Label>
-            <Label text="Ingresa la cantidad de dinero que deseas depositar a tu cuenta">
+            <Label text="Cuenta destino">
                <font>
                   <Font size="18.0" />
                </font>
@@ -75,7 +75,7 @@
                   <Insets bottom="10.0" />
                </padding>
             </Label>
-            <TextField fx:id="txtDeposit">
+            <TextField fx:id="txtWithdraw">
                <font>
                   <Font size="18.0" />
                </font>
@@ -86,7 +86,7 @@
                   <Insets left="90.0" right="90.0" />
                </VBox.margin>
             </TextField>
-            <Button fx:id="btnDeposit" mnemonicParsing="false" prefWidth="300.0" text="Depositar">
+            <Button fx:id="btnTransfer" mnemonicParsing="false" prefWidth="300.0" text="Transferir">
                <VBox.margin>
                   <Insets top="30.0" />
                </VBox.margin>
@@ -95,12 +95,12 @@
                </font>
             </Button>
             <Label fx:id="lblError">
-               <VBox.margin>
-                  <Insets top="15.0" />
-               </VBox.margin>
                <font>
                   <Font size="18.0" />
                </font>
+               <padding>
+                  <Insets top="15.0" />
+               </padding>
             </Label>
          </children>
       </VBox>
