@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Account;
+import model.TransactionManager;
 import utilities.Paths;
 
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class depositController implements AccountAwareController {
 
     @FXML
     void openAccountStatementWindow(ActionEvent event) {
-
+        navigateToWindow(Paths.ACCOUNT_STATEMENT, event);
     }
 
     @FXML
@@ -60,6 +61,11 @@ public class depositController implements AccountAwareController {
     @FXML
     void openWithdrawWindow(ActionEvent event) {
         navigateToWindow(Paths.WITHDRAW, event);
+    }
+
+    @FXML
+    void Deposit(ActionEvent event) {
+        DepositMoney();
     }
 
     private void navigateToWindow(String fxmlPath, ActionEvent event) {
@@ -91,6 +97,18 @@ public class depositController implements AccountAwareController {
         // Actualiza la interfaz con la información de la cuenta activa
         System.out.println("Cuenta recibida: " + activeAccount.getNumberAccount());
 
+    }
+
+    public void DepositMoney(){
+        try {
+            // Recupera el texto y conviértelo a un double
+            double value = Double.parseDouble(txtDeposit.getText());
+            System.out.println("Valor ingresado: " + value);
+            activeAccount.setBalance(activeAccount.getBalance() + value);
+        } catch (NumberFormatException e) {
+            // Maneja errores si el texto no es un número válido
+            System.err.println("Error: El valor ingresado no es un número válido.");
+        }
     }
 
 

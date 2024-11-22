@@ -47,7 +47,7 @@ public class withdrawController implements AccountAwareController{
 
     @FXML
     void openAccountStatementWindow(ActionEvent event) {
-
+        navigateToWindow(Paths.ACCOUNT_STATEMENT,event);
     }
 
     @FXML

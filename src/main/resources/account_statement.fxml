@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox prefHeight="503.0" prefWidth="854.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.depositController">
+<HBox prefHeight="503.0" prefWidth="854.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.account_statementController">
    <children>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="280.0" style="-fx-background-color: #002436;">
          <children>
@@ -59,7 +59,7 @@
       </VBox>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="680.0" HBox.hgrow="ALWAYS">
          <children>
-            <Label style="-fx-font-weight: bolder;" text="DEPOSITAR A TU CUENTA">
+            <Label style="-fx-font-weight: bolder;" text="TU ESTADO DE CUENTA">
                <font>
                   <Font size="20.0" />
                </font>
@@ -67,40 +67,52 @@
                   <Insets bottom="30.0" />
                </VBox.margin>
             </Label>
-            <Label text="Ingresa la cantidad de dinero que deseas depositar a tu cuenta">
+            <Label text="TITULAR DE LA CUENTA">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtAccountHolder" style="-fx-border-width: 0;">
+               <VBox.margin>
+                  <Insets bottom="40.0" left="80.0" right="80.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <Label text="NUMERO DE CUENTA">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtAccountNumber" style="-fx-border-width: 0;">
+               <VBox.margin>
+                  <Insets bottom="40.0" left="80.0" right="80.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <Label text="SALDO DISPONIBLE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtBankAccount" style="-fx-border-width: 0;">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="40.0" left="80.0" right="80.0" />
+               </VBox.margin>
+            </TextField>
+            <Label fx:id="lblError">
                <font>
                   <Font size="18.0" />
                </font>
                <padding>
-                  <Insets bottom="10.0" />
-               </padding>
-            </Label>
-            <TextField fx:id="txtDeposit">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <VBox.margin>
-                  <Insets left="90.0" right="90.0" />
-               </VBox.margin>
-            </TextField>
-            <Button fx:id="btnDeposit" mnemonicParsing="false" onAction="#Deposit" prefWidth="300.0" text="Depositar">
-               <VBox.margin>
-                  <Insets top="30.0" />
-               </VBox.margin>
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Button>
-            <Label fx:id="lblError">
-               <VBox.margin>
                   <Insets top="15.0" />
-               </VBox.margin>
-               <font>
-                  <Font size="18.0" />
-               </font>
+               </padding>
             </Label>
          </children>
       </VBox>
