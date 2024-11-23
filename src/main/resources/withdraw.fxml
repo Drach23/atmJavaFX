@@ -86,7 +86,7 @@
                   <Insets left="90.0" right="90.0" />
                </VBox.margin>
             </TextField>
-            <Button fx:id="btnWithdraw" mnemonicParsing="false" prefWidth="300.0" text="Retirar">
+            <Button fx:id="btnWithdraw" mnemonicParsing="false" onAction="#Withdraw" prefWidth="300.0" text="Retirar">
                <VBox.margin>
                   <Insets top="30.0" />
                </VBox.margin>

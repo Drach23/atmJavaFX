@@ -1,19 +1,22 @@
 package model;
+
 import java.util.ArrayList;
 
 public class TransactionManager {
-    //Atributos
     private Account account;
     private Atm atm;
     private ArrayList<Account> accounts;
+    private Boolean isDepositSuccesfull = false;
+    private Boolean iswithdrawSuccesfull = false;
+    private Boolean isTransferSuccesfull = false;
+    private Boolean HaveMoney = true;
+    private Boolean AtmError = false;
 
-
-    //Constructor
-    //Asegura que se cree la lista necesaria para almacenar todas las cuentas.
     public TransactionManager(){
-        accounts = new ArrayList();
+        accounts = new ArrayList<>();
     }
-    //Metodos setter y Getter
+
+    // Métodos setter y getter
     public Account getAccount() {
         return account;
     }
@@ -30,29 +33,52 @@ public class TransactionManager {
         this.atm = atm;
     }
 
-    //Realiza un retiro de dinero a la cuenta activa
-    public void withdraw(double money) {
-        if (account.balance < money || account.balance < 0) {
-            System.out.println("No tienes dinero suficiente para realizar la operacion");
-        }else {
-            if (money > atm.getWithdrawLimit()) {
-                System.out.println("El cajero no permite sacar mas de: " + "$" + atm.getWithdrawLimit());
-            } else {
-                account.balance -= money;
-                System.out.println("Se han retirado: " + "$" + money + "de la cuenta: " + account.numberAccount);
-            }
-        }
+    public Boolean getDepositSuccesfull() {
+        return isDepositSuccesfull;
     }
 
-    //agrega una cuenta al arraylist de cuentas
+    public void setDepositSuccesfull(Boolean depositSuccesfull) {
+        isDepositSuccesfull = depositSuccesfull;
+    }
+
+    public Boolean getIswithdrawSuccesfull() {
+        return iswithdrawSuccesfull;
+    }
+
+    public void setIswithdrawSuccesfull(Boolean iswithdrawSuccesfull) {
+        this.iswithdrawSuccesfull = iswithdrawSuccesfull;
+    }
+
+    public Boolean getTransferSuccesfull() {
+        return isTransferSuccesfull;
+    }
+
+    public void setTransferSuccesfull(Boolean transferSuccesfull) {
+        isTransferSuccesfull = transferSuccesfull;
+    }
+
+    public Boolean getHaveMoney() {
+        return HaveMoney;
+    }
+
+    public void setHaveMoney(Boolean haveMoney) {
+        HaveMoney = haveMoney;
+    }
+
+    public Boolean getAtmError() {
+        return AtmError;
+    }
+
+    public void setAtmError(Boolean atmError) {
+        AtmError = atmError;
+    }
+
     public void addAccount(Account account){
         accounts.add(account);
     }
 
-    /*Busca mediante el numero de cuenta una cuenta la se encuentra en un ArrayList donde se guardan todas las cuentas creadas
-     * Si la encuentra retorna la cuenta*/
-
-    public Account findAccountAndNip(String accountNumber,int nip){
+    // Buscar cuenta por número de cuenta y NIP
+    public Account findAccountAndNip(String accountNumber, int nip){
         for (Account account : accounts) {
             if(account.getNumberAccount().equals(accountNumber) && account.getNip() == nip){
                 return account;
@@ -61,6 +87,7 @@ public class TransactionManager {
         return null;
     }
 
+    // Buscar cuenta solo por número de cuenta
     public Account findAccount(String accountNumber){
         for (Account account : accounts) {
             if(account.getNumberAccount().equals(accountNumber)){
@@ -70,32 +97,52 @@ public class TransactionManager {
         return null;
     }
 
-
-
-
-    /*
-     *@Param money pide una cantidad de dinero la cual se usara para la transaccion en este caso deposito a cuenta propia
-     */
-
-    public void deposit(double money) {
-        account.balance += money;
-        System.out.println("Se han depositado: " + "$"+ money + " a su cuenta: " + account.numberAccount);
+    //todo Corregir errores de logica
+    // Realizar un retiro
+    public void withdraw(double money) {
+        // Validación en función del balance y el límite de retiro del cajero
+        if (account.getBalance() < money || account.getBalance() <= 0) {
+            System.out.println("No tienes dinero suficiente para realizar la operación.");
+            setHaveMoney(false);
+        } else {
+            if (money > atm.getWithdrawLimit()) {
+                System.out.println("El cajero no permite sacar más de: $" + atm.getWithdrawLimit());
+                setAtmError(true);
+            } else {
+                account.setBalance(account.getBalance() - money);
+                System.out.println("Se han retirado: $" + money + " de la cuenta: " + account.getNumberAccount());
+                setIswithdrawSuccesfull(true);
+            }
+        }
     }
 
-    /*
-     *@Param money pide una cantidad de dinero la cual se usara para la transaccion en este caso transferencia
-     *@Param beneficiaryAccount pide la cuenta a la cual se transferira el dinero*/
-    public void transfer(double money,String beneficiaryAccount) {
-        if (account.balance > money || account.balance > 0) {
+    // Realizar un depósito
+    public void deposit(double money) {
+        if (money > 0) {
+            account.setBalance(account.getBalance() + money);
+            System.out.println("Se han depositado: $" + money + " a su cuenta: " + account.getNumberAccount());
+            setDepositSuccesfull(true);
+        }else {
+            System.out.println("Debe ser una cantidad mayor a 0");
+        }
+    }
+
+    //todo realizar el agregado de errores y mensajes de satisfactorio
+    // Realizar una transferencia
+    public void transfer(double money, String beneficiaryAccount) {
+        if (account.getBalance() >= money) {
             Account beneficiary = findAccount(beneficiaryAccount);
             if (beneficiary == null) {
-                System.out.println("No se ha encontrado la cuenta");
-            }else {
-                account.balance -= money;
-                beneficiary.balance += money;
-                System.out.println("Transferencia de " + "$" + money + " a la cuenta: " + beneficiary.numberAccount +
-                        " Ha sido exitoso. ");
+                System.out.println("No se ha encontrado la cuenta beneficiaria.");
+            } else {
+                account.setBalance(account.getBalance() - money);
+                beneficiary.setBalance(beneficiary.getBalance() + money);
+                System.out.println("Transferencia de $" + money + " a la cuenta: " + beneficiary.getNumberAccount() + " ha sido exitosa.");
+                setTransferSuccesfull(true);
             }
+        } else {
+            System.out.println("Saldo insuficiente para la transferencia.");
+            setHaveMoney(false);
         }
     }
 }

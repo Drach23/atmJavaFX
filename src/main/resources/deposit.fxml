@@ -94,13 +94,13 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <Label fx:id="lblError">
-               <VBox.margin>
-                  <Insets top="15.0" />
-               </VBox.margin>
+            <Label fx:id="lblDepositError">
                <font>
                   <Font size="18.0" />
                </font>
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin>
             </Label>
          </children>
       </VBox>

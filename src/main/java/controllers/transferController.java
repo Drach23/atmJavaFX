@@ -7,8 +7,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.Account;
+import model.TransactionManager;
 import utilities.Paths;
 
 import java.io.IOException;
@@ -36,9 +38,13 @@ public class transferController implements AccountAwareController{
     private Label lblError;
 
     @FXML
-    private TextField txtWithdraw;
+    private TextField txtBeneficiary;
+
+    @FXML
+    private TextField txtTransferMoney;
 
     private Account activeAccount;
+    private TransactionManager transactionManager;
 
     @FXML
     void logout(ActionEvent event) {
@@ -65,6 +71,11 @@ public class transferController implements AccountAwareController{
         navigateToWindow(Paths.WITHDRAW,event);
     }
 
+    @FXML
+   void  TransferMoney(ActionEvent event){
+        transferToAccount();
+    }
+
     private void navigateToWindow(String fxmlPath, ActionEvent event) {
         try {
             // Cargar el archivo FXML
@@ -77,6 +88,7 @@ public class transferController implements AccountAwareController{
             // Pasar la cuenta activa al nuevo controlador
             if (controller instanceof AccountAwareController) {
                 ((AccountAwareController) controller).setCuentaActiva(activeAccount);
+                ((AccountAwareController) controller).setTransactionManager(transactionManager);
             }
 
             // Cambiar la escena
@@ -93,5 +105,22 @@ public class transferController implements AccountAwareController{
         // Actualiza la interfaz con la información de la cuenta activa
         System.out.println("Cuenta recibida: " + activeAccount.getNumberAccount());
 
+    }
+
+    @Override
+    public void setTransactionManager(TransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
+    }
+
+    public void transferToAccount(){
+        String accountNumber = txtBeneficiary.getText();
+        double money = Double.parseDouble(txtTransferMoney.getText());
+        try{
+            transactionManager.transfer(money, accountNumber);
+            lblError.setTextFill(Color.GREEN);
+            lblError.setText("Transferencia exitosa");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

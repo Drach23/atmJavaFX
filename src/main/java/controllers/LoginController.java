@@ -40,18 +40,9 @@ public class LoginController {
 
     @FXML
     void eventKey(KeyEvent event) {
-        Object source = event.getSource();
 
-        if (source.equals(txtAccount)) {
-            if (event.getCode() == KeyCode.SPACE){
-                event.consume();
-            }
-        }else if (source.equals(txtPassword)) {
-            if (event.getCode() == KeyCode.SPACE){
-                event.consume();
-            }
-        }
     }
+
 
     public void initialize() {
         // Configurar TextFormatter para que solo acepte números
@@ -80,7 +71,12 @@ public class LoginController {
         String accountNumber = txtAccount.getText().trim();
         String password = txtPassword.getText().trim();
         if (txtAccount.getText().isEmpty() || txtPassword.getText().isEmpty()){
+            errorMessage.setTextFill(Color.RED);
             errorMessage.setText("Completa los campos vacios");
+            return;
+        }
+        if(transactionManager == null){
+            System.out.println("transaction es null");
             return;
         }
         try{
@@ -112,6 +108,7 @@ public class LoginController {
 
             // Pasar la cuenta activa al controlador de Dashboard
             dashboardController.setCuentaActiva(transactionManager.getAccount());
+            dashboardController.setTransactionManager(transactionManager);
 
             // Configurar la nueva escena con el Dashboard
             Scene dashboardScene = new Scene(root);

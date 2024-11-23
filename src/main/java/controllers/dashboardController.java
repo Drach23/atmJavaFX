@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import model.Account;
+import model.TransactionManager;
 import utilities.Paths;
 
 import java.io.IOException;
@@ -33,6 +34,7 @@ public class dashboardController {
     @FXML
     private Label lblAccountName;
     private Account activeAccount;
+    private TransactionManager transactionManager;
 
     @FXML
     void logout(ActionEvent event) {
@@ -59,6 +61,10 @@ public class dashboardController {
         navigateToWindow(Paths.WITHDRAW, event);
     }
 
+    public void setTransactionManager(TransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
+    }
+
     private void navigateToWindow(String fxmlPath, ActionEvent event) {
         try {
             // Cargar el archivo FXML
@@ -71,6 +77,7 @@ public class dashboardController {
             // Pasar la cuenta activa al nuevo controlador
             if (controller instanceof AccountAwareController) {
                 ((AccountAwareController) controller).setCuentaActiva(activeAccount);
+                ((AccountAwareController) controller).setTransactionManager(transactionManager);
             }
 
             // Cambiar la escena

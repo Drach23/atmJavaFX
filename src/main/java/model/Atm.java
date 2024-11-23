@@ -1,7 +1,5 @@
 package model;
 
-
-// Modificación de la clase Atm
 public class Atm {
     private double cantMoney;
     private String location;
@@ -9,35 +7,54 @@ public class Atm {
     private double withdrawLimit;
     private TransactionManager transactionManager;
 
-    //Constructor
+    // Constructor
     public Atm(TransactionManager transactionManager) {
         this.cantMoney = 100000;
+        this.withdrawLimit = 10000;
         this.transactionManager = transactionManager;
     }
 
+    // Constructor alternativo
     public Atm(String location, Boolean isOperative, double withdrawLimit) {
         cantMoney = 100000;
+        this.withdrawLimit = 10000;
         this.location = location;
         this.isOperative = isOperative;
         this.withdrawLimit = withdrawLimit;
         this.transactionManager = transactionManager;
     }
 
-    //Método para iniciar sesión recibiendo los datos como parámetros
+    // Método para iniciar sesión con número de cuenta y NIP
     public void login(String numberAccount, int nip) {
-        // Buscar la cuenta
         Account account = transactionManager.findAccountAndNip(numberAccount, nip);
         if (account != null) {
             transactionManager.setAccount(account);
             account.setIsLogued(true);
             System.out.println("¡Inicio de sesión exitoso! Bienvenido, " + account.getName());
-            // Aquí puedes invocar el menú o acciones adicionales
         } else {
-            System.out.println("No se encontró la cuenta ingresada o el NIP es incorrecto.");
+            System.out.println("No se encontró la cuenta o el NIP es incorrecto.");
         }
     }
 
-    //Getters y Setters
+    // Validar si hay dinero suficiente en el cajero
+    public boolean isSufficientFunds(double amount) {
+        if (cantMoney >= amount) {
+            return true;
+        } else {
+            System.out.println("El cajero no tiene suficiente dinero para realizar esta operación.");
+            return false;
+        }
+    }
+
+    // Realizar un retiro
+    public void withdraw(double amount) {
+        if (isSufficientFunds(amount)) {
+            transactionManager.withdraw(amount);
+            cantMoney -= amount;  // Restar dinero del cajero
+        }
+    }
+
+    // Getters y Setters
     public double getCantMoney() {
         return cantMoney;
     }

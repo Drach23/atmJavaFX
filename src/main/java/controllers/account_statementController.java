@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Account;
+import model.TransactionManager;
 import utilities.Paths;
 
 import java.io.IOException;
@@ -42,6 +43,7 @@ public class account_statementController implements AccountAwareController{
     @FXML
     private TextField txtBankAccount;
     private Account activeAccount;
+    private TransactionManager transactionManager;
 
     @FXML
     void logout(ActionEvent event) {
@@ -80,6 +82,7 @@ public class account_statementController implements AccountAwareController{
             // Pasar la cuenta activa al nuevo controlador
             if (controller instanceof AccountAwareController) {
                 ((AccountAwareController) controller).setCuentaActiva(activeAccount);
+                ((AccountAwareController) controller).setTransactionManager(transactionManager);
             }
 
             // Cambiar la escena
@@ -101,6 +104,11 @@ public class account_statementController implements AccountAwareController{
             } else {
                 System.err.println("Error: Se intentó asignar una cuenta nula.");
             }
+    }
+
+    @Override
+    public void setTransactionManager(TransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
     }
 
     private void showAccountStatement() {

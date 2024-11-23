@@ -6,7 +6,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.Account;
 import model.TransactionManager;
@@ -36,7 +38,11 @@ public class depositController implements AccountAwareController {
     @FXML
     private TextField txtDeposit;
 
+    @FXML
+    private Label lblDepositError;
+
     private Account activeAccount;
+    private TransactionManager transactionManager;
 
     @FXML
     void logout(ActionEvent event) {
@@ -80,6 +86,7 @@ public class depositController implements AccountAwareController {
             // Pasar la cuenta activa al nuevo controlador
             if (controller instanceof AccountAwareController) {
                 ((AccountAwareController) controller).setCuentaActiva(activeAccount);
+                ((AccountAwareController) controller).setTransactionManager(transactionManager);
             }
 
             // Cambiar la escena
@@ -99,12 +106,25 @@ public class depositController implements AccountAwareController {
 
     }
 
+    @Override
+    public void setTransactionManager(TransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
+    }
+
     public void DepositMoney(){
         try {
-            // Recupera el texto y conviértelo a un double
-            double value = Double.parseDouble(txtDeposit.getText());
-            System.out.println("Valor ingresado: " + value);
-            activeAccount.setBalance(activeAccount.getBalance() + value);
+
+            double amount = Double.parseDouble(txtDeposit.getText());
+            transactionManager.deposit(amount);
+            if(transactionManager.getDepositSuccesfull() == true){
+                lblDepositError.setTextFill(Color.GREEN);
+                lblDepositError.setText("DEPOSITO DE: $" + amount + " " + "HA SIDO REALIZADO CON EXITO");
+                txtDeposit.clear();
+            }else {
+                lblDepositError.setTextFill(Color.RED);
+                lblDepositError.setText("LA CANTIDAD A DEPOSITAR DEBE SER MAYOR A 0");
+                txtDeposit.clear();
+            }
         } catch (NumberFormatException e) {
             // Maneja errores si el texto no es un número válido
             System.err.println("Error: El valor ingresado no es un número válido.");
