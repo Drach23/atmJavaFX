@@ -114,18 +114,32 @@ public class withdrawController implements AccountAwareController{
         try {
             double money = Double.parseDouble(txtWithdraw.getText());
             transactionManager.withdraw(money);
+
             if (transactionManager.getHaveMoney() == false) {
                 lblError.setTextFill(Color.RED);
                 lblError.setText("NO CUENTAS CON SALDO SUFICIENTE PARA REALIZAR EL RETIRO");
-            }else {
-                if(transactionManager.getAtmError() == true){
-                    lblError.setTextFill(Color.RED);
-                    lblError.setText("EL CAJERO CON SALDO SUFICIENTE PARA REALIZAR EL RETIRO.");
-                }else{
-                    lblError.setTextFill(Color.GREEN);
-                    lblError.setText("RETIRO DE: $" + money + "HA SIDO REALIZADO CON EXITO");
-                }
+                return;
             }
+
+            if(transactionManager.getAtmError() == true){
+                lblError.setTextFill(Color.RED);
+                lblError.setText("EL CAJERO CON SALDO SUFICIENTE PARA REALIZAR EL RETIRO.");
+                return;
+            }
+
+            if (transactionManager.getIswithdrawSuccesfull() == false) {
+                lblError.setTextFill(Color.RED);
+                lblError.setText("NO ES POSIBLE RETIRAR UNA CANTIDAD MENOR A 0");
+            }else {
+                lblError.setTextFill(Color.GREEN);
+                lblError.setText("RETIRO DE: $" + money + " HA SIDO REALIZADO CON EXITO");
+            }
+
+
+
+
+
+
         }catch (Exception e){
             lblError.setText(e.getMessage());
             System.out.println(e.getMessage());

@@ -117,8 +117,24 @@ public class transferController implements AccountAwareController{
         double money = Double.parseDouble(txtTransferMoney.getText());
         try{
             transactionManager.transfer(money, accountNumber);
+            if(transactionManager.getHaveMoney() == false){
+                lblError.setTextFill(Color.RED);
+                lblError.setText("NO CUENTAS CON SALDO SUFICIENTE PARA REALIZAR LA OPERACION");
+                return;
+            }
+            if(transactionManager.getTransferSuccesfull() == false){
+                lblError.setTextFill(Color.RED);
+                lblError.setText("LA CUENTA DESTINO NO FUE ENCONTRADA");
+                return;
+            }
+
+            if(transactionManager.getLowerThan0() == true){
+                lblError.setTextFill(Color.RED);
+                lblError.setText("NO ES POSIBLE TRANSFERIR UNA CANTIDAD MENOR O IGUAL A 0");
+            }
+
             lblError.setTextFill(Color.GREEN);
-            lblError.setText("Transferencia exitosa");
+            lblError.setText("TRANSFERENCIA EXITOSA");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

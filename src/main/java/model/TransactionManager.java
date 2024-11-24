@@ -11,6 +11,7 @@ public class TransactionManager {
     private Boolean isTransferSuccesfull = false;
     private Boolean HaveMoney = true;
     private Boolean AtmError = false;
+    private Boolean isLowerThan0 = false;
 
     public TransactionManager(){
         accounts = new ArrayList<>();
@@ -73,6 +74,14 @@ public class TransactionManager {
         AtmError = atmError;
     }
 
+    public Boolean getLowerThan0() {
+        return isLowerThan0;
+    }
+
+    public void setLowerThan0(Boolean lowerThan0) {
+        isLowerThan0 = lowerThan0;
+    }
+
     public void addAccount(Account account){
         accounts.add(account);
     }
@@ -101,20 +110,30 @@ public class TransactionManager {
     // Realizar un retiro
     public void withdraw(double money) {
         // Validación en función del balance y el límite de retiro del cajero
-        if (account.getBalance() < money || account.getBalance() <= 0) {
-            System.out.println("No tienes dinero suficiente para realizar la operación.");
+        double balance = account.getBalance();
+        double atmLimit = atm.getWithdrawLimit();
+
+        if(balance < money){
             setHaveMoney(false);
-        } else {
-            if (money > atm.getWithdrawLimit()) {
-                System.out.println("El cajero no permite sacar más de: $" + atm.getWithdrawLimit());
-                setAtmError(true);
-            } else {
-                account.setBalance(account.getBalance() - money);
-                System.out.println("Se han retirado: $" + money + " de la cuenta: " + account.getNumberAccount());
-                setIswithdrawSuccesfull(true);
-            }
+            System.out.println("No cuentas con fondos suficientes para realizar la operacion");
+            return;
         }
-    }
+        if(money <= 0){
+            setIswithdrawSuccesfull(false);
+            System.out.println("No puedes retirar una cantidad menor a 0");
+            return;
+        }
+        if(money >= atmLimit){
+            setAtmError(true);
+            System.out.println("El cajero no permite retirar mas de $" + atmLimit);
+            return;
+        }
+
+        account.setBalance(account.getBalance() - money);
+        System.out.println("Se han retirado $" + money + " de tu cuenta");
+        setIswithdrawSuccesfull(true);
+       }
+
 
     // Realizar un depósito
     public void deposit(double money) {
@@ -133,14 +152,20 @@ public class TransactionManager {
         if (account.getBalance() >= money) {
             Account beneficiary = findAccount(beneficiaryAccount);
             if (beneficiary == null) {
-                System.out.println("No se ha encontrado la cuenta beneficiaria.");
-            } else {
+                System.out.println("NO SE HA ENCONTRADO LA CUENTA BENEFICIARIA.");
+                setTransferSuccesfull(false);
+                return;
+            }
+            if (money <=0){
+                System.out.println("NO ES POSIBLE TRANSFERIR UNA CANTIDAD MENOR O IGUAL A 0");
+                setLowerThan0(true);
+                return;
+            }
                 account.setBalance(account.getBalance() - money);
                 beneficiary.setBalance(beneficiary.getBalance() + money);
                 System.out.println("Transferencia de $" + money + " a la cuenta: " + beneficiary.getNumberAccount() + " ha sido exitosa.");
                 setTransferSuccesfull(true);
-            }
-        } else {
+            }else {
             System.out.println("Saldo insuficiente para la transferencia.");
             setHaveMoney(false);
         }
